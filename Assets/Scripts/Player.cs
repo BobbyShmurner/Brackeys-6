@@ -43,8 +43,10 @@ public class Player : Damagable
 
     float cameraX = 0f;
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
+
         Cursor.lockState = CursorLockMode.Locked;
 
         rb = GetComponent<Rigidbody>();
@@ -161,7 +163,7 @@ public class Player : Damagable
         }
     }
 
-    protected override void Kill()
+    public override void Kill()
     {
         Debug.Log("uh oh i died f");
 

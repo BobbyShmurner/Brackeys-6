@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class Damagable : MonoBehaviour
 {
-    public float hp;
+    [SerializeField] float hp;
 
-    [HideInInspector] float maxHp;
+    float maxHp;
 
-    void Start()
+    public virtual void Start()
     {
         maxHp = hp;
+        CheckIfShouldKill();
+    }
+
+    void CheckIfShouldKill()
+    {
+        Damage(0);
     }
 
     public void Damage(float amount)
@@ -23,7 +29,7 @@ public class Damagable : MonoBehaviour
         }
     }
 
-    protected virtual void Kill()
+    public virtual void Kill()
     {
         Destroy(gameObject);
     }

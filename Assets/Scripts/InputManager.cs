@@ -13,8 +13,24 @@ class InputManager : MonoBehaviour
     public static Vector2 mousePos;
     public static Vector2 mouseDelta;
 
+    private static InputManager m_Instance;
+    public static InputManager Instance { get { return m_Instance; } }
+
     private void Awake()
     {
+        // Singleton Code
+
+        if (m_Instance != null && m_Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            m_Instance = this;
+        }
+
+        // Normal Code
+
         input = new Inputs();
 
         input.Mouse.Position.performed += ctx => mousePos = ctx.ReadValue<Vector2>();
