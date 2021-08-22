@@ -2,7 +2,7 @@
 using UnityEditor;
 
 [CustomEditor(typeof(Damagable), true)]
-public class LookAtPointEditor : Editor
+public class DamagableEditor : Editor
 {
     public override void OnInspectorGUI()
     {

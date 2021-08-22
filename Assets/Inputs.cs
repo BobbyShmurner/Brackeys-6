@@ -290,6 +290,52 @@ public class @Inputs : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Weapon"",
+            ""id"": ""306ae96c-9c85-4cc6-9641-c832e00618e6"",
+            ""actions"": [
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""bcf3d03b-4a2d-4f29-9bf5-84bf4d1eedc6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ADS"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b9ff71e-3cb5-4f87-b2e4-907db9e7b91c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""80ce7f05-c420-4be0-bdaf-2e95a0c04775"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd5ba42d-5592-422d-97ab-16f10aa64fed"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""ADS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -328,6 +374,10 @@ public class @Inputs : IInputActionCollection, IDisposable
         // General
         m_General = asset.FindActionMap("General", throwIfNotFound: true);
         m_General_Pause = m_General.FindAction("Pause", throwIfNotFound: true);
+        // Weapon
+        m_Weapon = asset.FindActionMap("Weapon", throwIfNotFound: true);
+        m_Weapon_Fire = m_Weapon.FindAction("Fire", throwIfNotFound: true);
+        m_Weapon_ADS = m_Weapon.FindAction("ADS", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -536,6 +586,47 @@ public class @Inputs : IInputActionCollection, IDisposable
         }
     }
     public GeneralActions @General => new GeneralActions(this);
+
+    // Weapon
+    private readonly InputActionMap m_Weapon;
+    private IWeaponActions m_WeaponActionsCallbackInterface;
+    private readonly InputAction m_Weapon_Fire;
+    private readonly InputAction m_Weapon_ADS;
+    public struct WeaponActions
+    {
+        private @Inputs m_Wrapper;
+        public WeaponActions(@Inputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Fire => m_Wrapper.m_Weapon_Fire;
+        public InputAction @ADS => m_Wrapper.m_Weapon_ADS;
+        public InputActionMap Get() { return m_Wrapper.m_Weapon; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(WeaponActions set) { return set.Get(); }
+        public void SetCallbacks(IWeaponActions instance)
+        {
+            if (m_Wrapper.m_WeaponActionsCallbackInterface != null)
+            {
+                @Fire.started -= m_Wrapper.m_WeaponActionsCallbackInterface.OnFire;
+                @Fire.performed -= m_Wrapper.m_WeaponActionsCallbackInterface.OnFire;
+                @Fire.canceled -= m_Wrapper.m_WeaponActionsCallbackInterface.OnFire;
+                @ADS.started -= m_Wrapper.m_WeaponActionsCallbackInterface.OnADS;
+                @ADS.performed -= m_Wrapper.m_WeaponActionsCallbackInterface.OnADS;
+                @ADS.canceled -= m_Wrapper.m_WeaponActionsCallbackInterface.OnADS;
+            }
+            m_Wrapper.m_WeaponActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
+                @ADS.started += instance.OnADS;
+                @ADS.performed += instance.OnADS;
+                @ADS.canceled += instance.OnADS;
+            }
+        }
+    }
+    public WeaponActions @Weapon => new WeaponActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -564,5 +655,10 @@ public class @Inputs : IInputActionCollection, IDisposable
     public interface IGeneralActions
     {
         void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IWeaponActions
+    {
+        void OnFire(InputAction.CallbackContext context);
+        void OnADS(InputAction.CallbackContext context);
     }
 }

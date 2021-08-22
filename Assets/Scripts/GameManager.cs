@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public bool UseAccurateDensities = true;
+    public bool CanCrouch = true;
 
     private static GameManager m_Instance;
     public static GameManager Instance { get { return m_Instance; } }

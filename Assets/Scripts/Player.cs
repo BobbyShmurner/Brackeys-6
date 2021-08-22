@@ -104,13 +104,13 @@ public class Player : Damagable
 
     void Crouch(bool crouching)
     {
+        if (!GameManager.Instance.CanCrouch) return;
+
         if (crouching) {
             transform.localScale = new Vector3(transform.localScale.x, crouchHeight, transform.localScale.z);
             transform.position -= new Vector3(0, baseHeight - crouchHeight, 0);
 
             isCrouching = true;
-
-            Damage(150);
         } else
         {
             shouldUncrouch = true;
@@ -141,7 +141,7 @@ public class Player : Damagable
         float mouseDeltaX = InputManager.mouseDelta.x * lookSpeed;
         float mouseDeltaY = InputManager.mouseDelta.y * lookSpeed;
 
-        cameraX = Mathf.Clamp(cameraX - mouseDeltaY, -90f, 90f);
+        cameraX = Mathf.Clamp(cameraX - mouseDeltaY, -89.9f, 89.9f);
 
         playerCam.transform.localEulerAngles = new Vector3(cameraX, playerCam.transform.localEulerAngles.y + mouseDeltaX, 0);
         playerVisuals.localEulerAngles += new Vector3(0, mouseDeltaX, 0);
