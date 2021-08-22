@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 28080616264516463}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -110,6 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 10
   destroyedPrefabs:
-  - {fileID: 6857386701073047890, guid: 7f3593949c2ca124889984e95f1fe21a, type: 3}
-  - {fileID: 3730623814416271706, guid: 41467708a07c1b74d9db90dfa81ce43c, type: 3}
-  - {fileID: 0}
+  - {fileID: 1132327057981107866, guid: 7f3593949c2ca124889984e95f1fe21a, type: 3}
+  - {fileID: 6083111473526805639, guid: 41467708a07c1b74d9db90dfa81ce43c, type: 3}
+  - {fileID: 2847875745935361068, guid: fbe36df353640064280aba2b12523867, type: 3}

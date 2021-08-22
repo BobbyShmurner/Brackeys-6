@@ -467,10 +467,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 28080616264516461, guid: b685bf33512375e43be6b3baa77f6c28, type: 3}
-      propertyPath: destroyedPrefabs.Array.data[2]
-      value: 
-      objectReference: {fileID: 2990880750985241856, guid: fbe36df353640064280aba2b12523867, type: 3}
     - target: {fileID: 28080616264516463, guid: b685bf33512375e43be6b3baa77f6c28, type: 3}
       propertyPath: m_Name
       value: Pillar
