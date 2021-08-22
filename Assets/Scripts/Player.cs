@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public class Player : Damagable
 {
     [SerializeField] Camera playerCam;
     [SerializeField] Transform playerVisuals;
@@ -107,6 +107,8 @@ public class Player : MonoBehaviour
             transform.position -= new Vector3(0, baseHeight - crouchHeight, 0);
 
             isCrouching = true;
+
+            Damage(150);
         } else
         {
             shouldUncrouch = true;
@@ -157,6 +159,13 @@ public class Player : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
         }
+    }
+
+    protected override void Kill()
+    {
+        Debug.Log("uh oh i died f");
+
+        //base.Kill();
     }
 
     private void OnDrawGizmosSelected()
