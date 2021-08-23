@@ -310,6 +310,14 @@ public class @Inputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""WeaponChange"",
+                    ""type"": ""Value"",
+                    ""id"": ""be5698e5-211d-4ac4-8900-f7cd90f97696"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -332,6 +340,17 @@ public class @Inputs : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""ADS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aeb6c637-e325-4376-b522-2e4f28cca502"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""WeaponChange"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -378,6 +397,7 @@ public class @Inputs : IInputActionCollection, IDisposable
         m_Weapon = asset.FindActionMap("Weapon", throwIfNotFound: true);
         m_Weapon_Fire = m_Weapon.FindAction("Fire", throwIfNotFound: true);
         m_Weapon_ADS = m_Weapon.FindAction("ADS", throwIfNotFound: true);
+        m_Weapon_WeaponChange = m_Weapon.FindAction("WeaponChange", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -592,12 +612,14 @@ public class @Inputs : IInputActionCollection, IDisposable
     private IWeaponActions m_WeaponActionsCallbackInterface;
     private readonly InputAction m_Weapon_Fire;
     private readonly InputAction m_Weapon_ADS;
+    private readonly InputAction m_Weapon_WeaponChange;
     public struct WeaponActions
     {
         private @Inputs m_Wrapper;
         public WeaponActions(@Inputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Fire => m_Wrapper.m_Weapon_Fire;
         public InputAction @ADS => m_Wrapper.m_Weapon_ADS;
+        public InputAction @WeaponChange => m_Wrapper.m_Weapon_WeaponChange;
         public InputActionMap Get() { return m_Wrapper.m_Weapon; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -613,6 +635,9 @@ public class @Inputs : IInputActionCollection, IDisposable
                 @ADS.started -= m_Wrapper.m_WeaponActionsCallbackInterface.OnADS;
                 @ADS.performed -= m_Wrapper.m_WeaponActionsCallbackInterface.OnADS;
                 @ADS.canceled -= m_Wrapper.m_WeaponActionsCallbackInterface.OnADS;
+                @WeaponChange.started -= m_Wrapper.m_WeaponActionsCallbackInterface.OnWeaponChange;
+                @WeaponChange.performed -= m_Wrapper.m_WeaponActionsCallbackInterface.OnWeaponChange;
+                @WeaponChange.canceled -= m_Wrapper.m_WeaponActionsCallbackInterface.OnWeaponChange;
             }
             m_Wrapper.m_WeaponActionsCallbackInterface = instance;
             if (instance != null)
@@ -623,6 +648,9 @@ public class @Inputs : IInputActionCollection, IDisposable
                 @ADS.started += instance.OnADS;
                 @ADS.performed += instance.OnADS;
                 @ADS.canceled += instance.OnADS;
+                @WeaponChange.started += instance.OnWeaponChange;
+                @WeaponChange.performed += instance.OnWeaponChange;
+                @WeaponChange.canceled += instance.OnWeaponChange;
             }
         }
     }
@@ -660,5 +688,6 @@ public class @Inputs : IInputActionCollection, IDisposable
     {
         void OnFire(InputAction.CallbackContext context);
         void OnADS(InputAction.CallbackContext context);
+        void OnWeaponChange(InputAction.CallbackContext context);
     }
 }

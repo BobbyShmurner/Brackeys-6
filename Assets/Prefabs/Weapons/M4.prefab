@@ -100,10 +100,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ads: 0
+  shouldFire: 0
   weaponInfo:
+    bulletImpact: {fileID: 8199563588144054213, guid: 1669d17928454ed45ab582b6d9778bc6, type: 3}
+    automatic: 1
+    fireRate: 0.1
+    magCount: 0
+    reloadTime: 0
     damage: 1
+    force: 100
     adsLerpSpeed: 10
-    adsFov: 80
+    adsFov: 60
     normalPos: {x: 0.3, y: -0.15, z: 0.4}
     adsingPos: {x: 0, y: -0.1097, z: 0.2}
 --- !u!1 &699194277735352762

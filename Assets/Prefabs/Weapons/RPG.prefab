@@ -180,7 +180,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2750611294455517345
 Transform:
   m_ObjectHideFlags: 0
@@ -260,6 +260,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ads: 0
   weaponInfo:
+    bulletImpact: {fileID: 8199563588144054213, guid: 1669d17928454ed45ab582b6d9778bc6, type: 3}
+    automatic: 0
+    fireRate: 0
     damage: 1
     adsLerpSpeed: 10
     adsFov: 80
