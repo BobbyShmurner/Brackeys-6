@@ -19,6 +19,9 @@ public class Destructable : Damagable
         GameObject destroyedObject = Instantiate(destroyedPrefabs[Random.Range(0, destroyedPrefabs.Count)]);
 
         destroyedObject.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        destroyedObject.transform.localScale = transform.localScale;
+
+        destroyedObject.GetComponent<AccurateMass>().CalculateMass();
 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb) {
@@ -26,6 +29,11 @@ public class Destructable : Damagable
             {
                 rigidbody.velocity = rb.velocity;
             }
+        }
+
+        foreach (Transform childTrans in destroyedObject.GetComponentsInChildren<Transform>())
+        {
+            childTrans.parent = null;
         }
 
         base.Kill();

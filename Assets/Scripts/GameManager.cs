@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public bool UseAccurateDensities = true;
+    public bool UseAccurateMasses = true;
     public bool CanCrouch = true;
 
     private static GameManager m_Instance;

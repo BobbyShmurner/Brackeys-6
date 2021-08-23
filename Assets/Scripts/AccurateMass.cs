@@ -10,9 +10,17 @@ class AccurateMass : MonoBehaviour
     [SerializeField] float density;
     [SerializeField] bool calculateForChildren = true;
 
+    bool hasCaulculatedMass = false;
+
     void Start()
     {
-        if (!GameManager.Instance.UseAccurateDensities) return;
+        CalculateMass();
+    }
+
+    public void CalculateMass()
+    {
+        if (hasCaulculatedMass) return;
+        if (!GameManager.Instance.UseAccurateMasses) return;
 
         if (calculateForChildren)
         {
@@ -20,13 +28,15 @@ class AccurateMass : MonoBehaviour
             {
                 childRb.mass = VolumeOfMesh(childRb.GetComponent<MeshFilter>().sharedMesh) * density;
             }
-        } else
+        }
+        else
         {
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb) { rb.mass = VolumeOfMesh(GetComponent<MeshFilter>().sharedMesh) * density; }
         }
-    }
 
+        hasCaulculatedMass = true;
+    }
 
     // Credit to "Statement" On Unity Answers and "Frank Krueger" On Stack Overflow for this code :)
     public float SignedVolumeOfTriangle(Vector3 p1, Vector3 p2, Vector3 p3)

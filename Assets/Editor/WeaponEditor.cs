@@ -22,6 +22,7 @@ public class WeaponEditor : Editor
         targetWeapon.weaponInfo.bulletImpact = EditorGUILayout.ObjectField("Bullet Impact", targetWeapon.weaponInfo.bulletImpact, typeof(GameObject), false) as GameObject;
         targetWeapon.weaponInfo.damage = EditorGUILayout.FloatField("Damage", targetWeapon.weaponInfo.damage);
         targetWeapon.weaponInfo.force = EditorGUILayout.FloatField("Impact Force", targetWeapon.weaponInfo.force);
+        targetWeapon.weaponInfo.recoil = EditorGUILayout.FloatField("Recoil", targetWeapon.weaponInfo.recoil);
         targetWeapon.weaponInfo.automatic = EditorGUILayout.Toggle("Is Automatic", targetWeapon.weaponInfo.automatic);
 
         EditorGUI.BeginDisabledGroup(!targetWeapon.weaponInfo.automatic);

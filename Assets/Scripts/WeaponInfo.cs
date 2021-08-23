@@ -16,6 +16,7 @@ public struct WeaponInfo
 
     public float damage;
     public float force;
+    public float recoil;
 
     public float adsLerpSpeed;
     public float adsFov;

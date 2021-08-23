@@ -48,6 +48,8 @@ public class Weapon : MonoBehaviour
 
         if (weaponInfo.automatic) timeTillNextFire = weaponInfo.fireRate;
 
+        transform.Rotate(new Vector3(-1, 0, 0) * weaponInfo.recoil);
+
         if (Physics.Raycast(weaponController.mainCam.transform.position, weaponController.mainCam.transform.forward, out RaycastHit hit, Mathf.Infinity, ~weaponController.raycastIgnore))
         {
             if (hit.collider.GetComponent<Damagable>()) hit.collider.GetComponent<Damagable>().Damage(weaponInfo.damage);
