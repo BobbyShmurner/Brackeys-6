@@ -18,8 +18,7 @@ public class Destructable : Damagable
 
         GameObject destroyedObject = Instantiate(destroyedPrefabs[Random.Range(0, destroyedPrefabs.Count)]);
 
-        destroyedObject.transform.position = transform.position;
-        destroyedObject.transform.rotation = transform.rotation;
+        destroyedObject.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb) {

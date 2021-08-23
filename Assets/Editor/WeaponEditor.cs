@@ -8,11 +8,13 @@ using System;
 public class WeaponEditor : Editor
 {
     bool invertToggle = false;
-    bool adsToggle = false;
+    float baseFov;
 
     public override void OnInspectorGUI()
     {
         Weapon targetWeapon = (Weapon)target;
+        WeaponController targetWeaponController = targetWeapon.GetComponentInParent<WeaponController>();
+
         invertToggle = Math.Sign(targetWeapon.transform.localScale.z) == -1;
 
         EditorGUI.BeginChangeCheck();
@@ -28,50 +30,66 @@ public class WeaponEditor : Editor
             );
         }
 
-        //ADS
-
         if (!Application.isPlaying)
         {
+            if (targetWeaponController) targetWeapon.gameObject.SetActive(targetWeaponController.currentWeapon == targetWeapon); // Enable if its the selected Weapon, Disable if its not
+
             EditorGUI.BeginChangeCheck();
 
-            targetWeapon.ADSing = EditorGUILayout.Toggle("ADS", targetWeapon.ADSing);
+            targetWeapon.ads = EditorGUILayout.Toggle("Ads", targetWeapon.ads);
 
             if (EditorGUI.EndChangeCheck())
             {
-                if (targetWeapon.ADSing)
+                if (targetWeapon.ads)
                 {
-                    targetWeapon.transform.localPosition = targetWeapon.ADSingPos;
+                    targetWeapon.transform.localPosition = targetWeapon.weaponInfo.adsingPos;
+
+                    baseFov = Camera.main.fieldOfView;
                 }
                 else
                 {
-                    targetWeapon.transform.localPosition = targetWeapon.normalPos;
+                    targetWeapon.transform.localPosition = targetWeapon.weaponInfo.normalPos;
+
+                    Camera.main.fieldOfView = baseFov;
                 }
             }
 
-            if (targetWeapon.ADSing)
-            {
-                targetWeapon.normalPos = EditorGUILayout.Vector3Field("Normal Pos", targetWeapon.normalPos);
+            DrawAdsFovSlider(targetWeapon);
 
-                targetWeapon.ADSingPos = EditorGUILayout.Vector3Field("ADSing Pos", targetWeapon.transform.localPosition);
-                targetWeapon.transform.localPosition = targetWeapon.ADSingPos;
+            if (targetWeapon.ads)
+            {
+                targetWeapon.weaponInfo.normalPos = EditorGUILayout.Vector3Field("Normal Pos", targetWeapon.weaponInfo.normalPos);
+
+                targetWeapon.weaponInfo.adsingPos = EditorGUILayout.Vector3Field("Adsing Pos", targetWeapon.transform.localPosition);
+                targetWeapon.transform.localPosition = targetWeapon.weaponInfo.adsingPos;
+
+                Camera.main.fieldOfView = targetWeapon.weaponInfo.adsFov;
             }
             else
             {
-                targetWeapon.normalPos = EditorGUILayout.Vector3Field("Normal Pos", targetWeapon.transform.localPosition);
-                targetWeapon.transform.localPosition = targetWeapon.normalPos;
+                targetWeapon.weaponInfo.normalPos = EditorGUILayout.Vector3Field("Normal Pos", targetWeapon.transform.localPosition);
+                targetWeapon.transform.localPosition = targetWeapon.weaponInfo.normalPos;
 
-                targetWeapon.ADSingPos = EditorGUILayout.Vector3Field("ADSing Pos", targetWeapon.ADSingPos);
+                targetWeapon.weaponInfo.adsingPos = EditorGUILayout.Vector3Field("Adsing Pos", targetWeapon.weaponInfo.adsingPos);
             }
         } else {
             EditorGUI.BeginDisabledGroup(true);
-
-            EditorGUILayout.Toggle("ADS", targetWeapon.ADSing);
-
-            EditorGUILayout.Vector3Field("Normal Pos", targetWeapon.normalPos);
-            EditorGUILayout.Vector3Field("ADSing Pos", targetWeapon.ADSingPos);
-
+            EditorGUILayout.Toggle("Ads", targetWeapon.ads);
             EditorGUI.EndDisabledGroup();
+
+            DrawAdsFovSlider(targetWeapon);
+
+            targetWeapon.weaponInfo.normalPos = EditorGUILayout.Vector3Field("Normal Pos", targetWeapon.weaponInfo.normalPos);
+            targetWeapon.weaponInfo.adsingPos = EditorGUILayout.Vector3Field("Adsing Pos", targetWeapon.weaponInfo.adsingPos);
         }
 
+        //DrawDefaultInspector();
+    }
+
+    void DrawAdsFovSlider(Weapon targetWeapon)
+    {
+        EditorGUI.BeginDisabledGroup(!targetWeapon.ads);
+        targetWeapon.weaponInfo.adsFov = EditorGUILayout.Slider("Ads Fov", targetWeapon.weaponInfo.adsFov, 0.001f, 179f);
+        EditorGUI.EndDisabledGroup();
     }
 }

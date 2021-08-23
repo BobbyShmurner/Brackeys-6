@@ -7,20 +7,29 @@ public class WeaponController : MonoBehaviour
     public Weapon currentWeapon;
     [SerializeField] LayerMask raycastIgnore;
 
-    public bool ADS = false;
-    public float lerpSpeed;
+    public bool ads = false;
+
+    public float lookAtLerpSpeed;
 
     Vector3 targetPos;
 
     Inputs input;
     bool controlsReady = false;
 
+    [HideInInspector] public Camera mainCam;
+    [HideInInspector] public float baseFov;
+
     void Start()
     {
+        mainCam = Camera.main;
+        baseFov = mainCam.fieldOfView;
+
         input = new Inputs();
 
-        input.Weapon.ADS.performed += ctx => ADS = true;
-        input.Weapon.ADS.canceled += ctx => ADS = false;
+        input.Weapon.ADS.performed += ctx => ads = true;
+        input.Weapon.ADS.canceled += ctx => ads = false;
+
+        input.Weapon.Fire.performed += ctx => currentWeapon.Fire();
 
         controlsReady = true;
         SetControlsActive(true);
@@ -28,8 +37,9 @@ public class WeaponController : MonoBehaviour
 
     void Update()
     {
-        if (ADS) {
-            currentWeapon.transform.localRotation = Quaternion.Lerp(currentWeapon.transform.localRotation, Quaternion.identity, lerpSpeed * Time.deltaTime);
+        if (ads) {
+            currentWeapon.transform.localRotation = Quaternion.Lerp(currentWeapon.transform.localRotation, Quaternion.identity, currentWeapon.weaponInfo.adsLerpSpeed * Time.deltaTime);
+
             return;
         }
 
@@ -37,18 +47,16 @@ public class WeaponController : MonoBehaviour
 
         Vector3 direction = targetPos - currentWeapon.transform.position;
         Quaternion toRotation = Quaternion.LookRotation(direction);
-        currentWeapon.transform.rotation = Quaternion.Lerp(currentWeapon.transform.rotation, toRotation, lerpSpeed * Time.deltaTime);
+        currentWeapon.transform.rotation = Quaternion.Lerp(currentWeapon.transform.rotation, toRotation, lookAtLerpSpeed * Time.deltaTime);
     }
 
     void FindTargatPos()
     {
         targetPos = transform.forward * 1000;
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ~raycastIgnore))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, ~raycastIgnore))
         {
             targetPos = hit.point;
-            Debug.Log(hit.collider.name);
         }
     }
 

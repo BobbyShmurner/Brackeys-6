@@ -4,19 +4,39 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [HideInInspector] public bool ADSing = false;
+    [HideInInspector] public bool ads = false;
 
-    [HideInInspector] public Vector3 normalPos;
-    [HideInInspector] public Vector3 ADSingPos;
+    public WeaponInfo weaponInfo;
+    WeaponController weaponController;
+
+    void Start()
+    {
+        weaponController = GetComponentInParent<WeaponController>();
+    }
 
     void Update()
     {
-        ADSing = GetComponentInParent<WeaponController>().ADS;
-        float lerpSpeed = GetComponentInParent<WeaponController>().lerpSpeed;
+        ads = weaponController.ads;
+        Ads(ads);
+    }
 
-        Vector3 targetPos = normalPos;
-        if (ADSing) targetPos = ADSingPos;
+    void Ads(bool isAdsing)
+    {
+        Vector3 targetPos = weaponInfo.normalPos;
+        float targetFov = weaponController.baseFov;
 
-        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, lerpSpeed * Time.deltaTime);
+        if (isAdsing)
+        {
+            targetPos = weaponInfo.adsingPos;
+            targetFov = weaponInfo.adsFov;
+        }
+
+        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, weaponInfo.adsLerpSpeed * Time.deltaTime);
+        weaponController.mainCam.fieldOfView = Mathf.Lerp(weaponController.mainCam.fieldOfView, targetFov, weaponInfo.adsLerpSpeed * Time.deltaTime);
+    }
+
+    public virtual void Fire()
+    {
+
     }
 }
